@@ -1,12 +1,27 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
 public class App {
     public static void main(String[] args) throws Exception {
         Input input = readFile("a_example");
+
+        List<Delivery> deliveries = new ArrayList<>();
+        List<Integer> pizzas1 = new ArrayList<>();
+        pizzas1.add(1);
+        pizzas1.add(4);
+        List<Integer> pizzas2 = new ArrayList<>();
+        pizzas2.add(0);
+        pizzas2.add(2);
+        pizzas2.add(3);
+        deliveries.add(new Delivery(pizzas1));
+        deliveries.add(new Delivery(pizzas2));
+        Output output = new Output(deliveries);
+        writeFile(output);
     }
 
     public static Input readFile(String fileName) throws IOException {
@@ -27,6 +42,19 @@ public class App {
                 pizzas.add(new Pizza(ingredients));
             }
             return new Input(pizzas, teams);
+        }
+    }
+
+    public static void writeFile(Output output) throws IOException {
+        try (PrintWriter writer = new PrintWriter(new FileWriter("output.out"))) {
+            writer.println(output.deliveries.size());
+            for (Delivery delivery : output.deliveries) {
+                writer.print(delivery.pizzas.size());
+                for (Integer pizza : delivery.pizzas) {
+                    writer.print(" " + pizza);
+                }
+                writer.print("\n");
+            }
         }
     }
 }
